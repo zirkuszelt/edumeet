@@ -5,13 +5,23 @@ import PropTypes from 'prop-types';
 import JoinDialog from './JoinDialog';
 import LoadingView from './Loader/LoadingView';
 import { LazyPreload } from './Loader/LazyPreload';
+import * as settingsActions from '../actions/settingsActions';
+import { withRoomContext } from '../RoomContext';
 
 const Room = LazyPreload(() => import(/* webpackChunkName: "room" */ './Room'));
+
+const urlParser = new URL(window.location);
+const parameters = urlParser.searchParams;
+const localeParam = parameters.get('locale');
 
 const App = (props) =>
 {
 	const {
-		room
+		room,
+		roomClient,
+		autoJoin,
+		locale,
+		disableAutoJoin
 	} = props;
 
 	const id = useParams().id.toLowerCase();
@@ -25,9 +35,23 @@ const App = (props) =>
 
 	if (!room.joined)
 	{
-		return (
-			<JoinDialog roomId={id} />
-		);
+		if (localeParam && localeParam !== locale)
+		{
+			// eslint-disable-next-line no-console
+			console.log(`set locale ${localeParam}`);
+			roomClient.setLocale(localeParam);
+		}
+
+		if (autoJoin)
+		{
+			disableAutoJoin();
+			roomClient.join({
+				id : id
+			});
+
+		}
+
+		return <div />;
 	}
 	else
 	{
@@ -41,17 +65,31 @@ const App = (props) =>
 
 App.propTypes =
 {
-	room : PropTypes.object.isRequired
+	room   : PropTypes.object.isRequired,
+	locale : PropTypes.string.isRequired
 };
 
 const mapStateToProps = (state) =>
 	({
-		room : state.room
+		room     : state.room,
+		autoJoin : state.settings.autoJoin,
+		locale   : state.intl.locale
 	});
 
-export default connect(
+const mapDispatchToProps = (dispatch) =>
+{
+	return {
+		disableAutoJoin : () =>
+		{
+			dispatch(settingsActions.setAutoJoin(false));
+		}
+
+	};
+};
+
+export default withRoomContext(connect(
 	mapStateToProps,
-	null,
+	mapDispatchToProps,
 	null,
 	{
 		areStatesEqual : (next, prev) =>
@@ -61,4 +99,4 @@ export default connect(
 			);
 		}
 	}
-)(App);
+)(App));

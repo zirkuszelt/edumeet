@@ -15,6 +15,7 @@ import RoomClient from './RoomClient';
 import RoomContext from './RoomContext';
 import deviceInfo from './deviceInfo';
 import * as meActions from './actions/meActions';
+import * as settingsActions from './actions/settingsActions';
 import UnsupportedBrowser from './components/UnsupportedBrowser';
 import JoinDialog from './components/JoinDialog';
 import LoginDialog from './components/AccessControl/LoginDialog';
@@ -89,6 +90,7 @@ function run()
 	const displayName = parameters.get('displayName');
 	const muted = parameters.get('muted') === 'true';
 	const headless = parameters.get('headless');
+	const autoJoin = parameters.get('autoJoin') === 'true';
 
 	const { pathname } = window.location;
 
@@ -161,6 +163,10 @@ function run()
 			loginEnabled : window.config.loginEnabled
 		})
 	);
+	if (autoJoin)
+	{
+		store.dispatch(settingsActions.setAutoJoin(true));
+	}
 
 	roomClient = new RoomClient(
 		{

@@ -1,6 +1,7 @@
 const initialState =
 {
 	displayName             : '',
+	autoJoin                : false,
 	selectedWebcam          : null,
 	selectedAudioDevice     : null,
 	advancedMode            : false,
@@ -54,6 +55,13 @@ const settings = (state = initialState, action) =>
 			const { displayName } = action.payload;
 
 			return { ...state, displayName };
+		}
+
+		case 'SET_AUTO_JOIN':
+		{
+			const { autoJoin } = action.payload;
+
+			return { ...state, autoJoin };
 		}
 
 		case 'TOGGLE_ADVANCED_MODE':

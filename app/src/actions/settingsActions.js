@@ -52,6 +52,12 @@ export const setDisplayName = (displayName) =>
 		payload : { displayName }
 	});
 
+export const setAutoJoin = (autoJoin) =>
+	({
+		type    : 'SET_AUTO_JOIN',
+		payload : { autoJoin }
+	});
+
 export const toggleAdvancedMode = () =>
 	({
 		type : 'TOGGLE_ADVANCED_MODE'

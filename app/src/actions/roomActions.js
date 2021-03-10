@@ -163,6 +163,12 @@ export const toggleJoined = () =>
 		type : 'TOGGLE_JOINED'
 	});
 
+export const setJoinLoading = (isJoinLoading) =>
+	({
+		type    : 'SET_JOIN_LOADING',
+		payload : { isJoinLoading }
+	});
+
 export const toggleConsumerFullscreen = (consumerId) =>
 	({
 		type    : 'TOGGLE_FULLSCREEN_CONSUMER',
