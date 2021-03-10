@@ -143,14 +143,16 @@ function run()
 	if (unsupportedBrowser || webrtcUnavailable)
 	{
 		render(
-			<MuiThemeProvider theme={theme}>
-				<IntlProvider value={intl}>
-					<UnsupportedBrowser
-						webrtcUnavailable={webrtcUnavailable}
-						platform={device.platform}
-					/>
-				</IntlProvider>
-			</MuiThemeProvider>,
+			<Provider store={store}>
+				<MuiThemeProvider theme={theme}>
+					<IntlProvider value={intl}>
+						<UnsupportedBrowser
+							webrtcUnavailable={webrtcUnavailable}
+							platform={device.platform}
+						/>
+					</IntlProvider>
+				</MuiThemeProvider>
+			</Provider>,
 			document.getElementById('edumeet')
 		);
 
