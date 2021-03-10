@@ -15,7 +15,10 @@ import MicOffIcon from '@material-ui/icons/MicOff';
 import VideoIcon from '@material-ui/icons/Videocam';
 import VideoOffIcon from '@material-ui/icons/VideocamOff';
 import ScreenIcon from '@material-ui/icons/ScreenShare';
-
+import * as roomActions from '../../actions/roomActions';
+import SettingsIcon from '@material-ui/icons/Settings';
+import AppsIcon from '@material-ui/icons/Apps';
+import { VideoLabel } from '@material-ui/icons';
 const styles = (theme) =>
 	({
 		root :
@@ -42,7 +45,7 @@ const styles = (theme) =>
 		},
 		fab :
 		{
-			margin : theme.spacing(1)
+			margin : theme.spacing(0.3)
 		},
 		show :
 		{
@@ -96,7 +99,10 @@ const ButtonControlBar = (props) =>
 		webcamProducer,
 		screenProducer,
 		classes,
-		theme
+		theme,
+		setSettingsOpen,
+		currentMode,
+		handleChangeMode
 	} = props;
 
 	let micState;
@@ -194,7 +200,25 @@ const ButtonControlBar = (props) =>
 		});
 	}
 
-	const smallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+	const settingsTip = intl.formatMessage({
+		id             : 'tooltip.settings',
+		defaultMessage : 'Show settings'
+	});
+
+	// eslint-disable-next-line no-console
+	console.log('theme', theme.breakpoints);
+	const smallScreen = useMediaQuery(theme.breakpoints.down('xs'));
+
+	// eslint-disable-next-line no-console
+	console.log('isSmallScreen', smallScreen);
+
+	const modeTip = currentMode === 'filmstrip' ? intl.formatMessage({
+		id             : 'label.democratic',
+		defaultMessage : 'Democratic view'
+	}) : intl.formatMessage({
+		id             : 'label.filmstrip',
+		defaultMessage : 'Filmstrip view'
+	});
 
 	return (
 		<div
@@ -219,7 +243,7 @@ const ButtonControlBar = (props) =>
 					className={classes.fab}
 					disabled={!me.canSendMic || me.audioInProgress}
 					color={micState === 'on' ? 'primary' : 'secondary'}
-					size={smallScreen ? 'large' : 'medium'}
+					size='small'
 					onClick={() =>
 					{
 						if (micState === 'off')
@@ -246,7 +270,7 @@ const ButtonControlBar = (props) =>
 					className={classes.fab}
 					disabled={!me.canSendWebcam || me.webcamInProgress}
 					color={webcamState === 'on' ? 'primary' : 'secondary'}
-					size={smallScreen ? 'large' : 'medium'}
+					size='small'
 					onClick={() =>
 					{
 						webcamState === 'on' ?
@@ -261,7 +285,7 @@ const ButtonControlBar = (props) =>
 					}
 				</Fab>
 			</Tooltip>
-			{ me.browser.platform !== 'mobile' &&
+			{ me.browser.platform !== 'mobile' && !smallScreen &&
 				<Tooltip title={screenTip} placement={smallScreen ? 'top' : 'right'}>
 					<Fab
 						aria-label={intl.formatMessage({
@@ -271,7 +295,7 @@ const ButtonControlBar = (props) =>
 						className={classes.fab}
 						disabled={!me.canShareScreen || me.screenShareInProgress}
 						color={screenState === 'on' ? 'primary' : 'secondary'}
-						size={smallScreen ? 'large' : 'medium'}
+						size='small'
 						onClick={() =>
 						{
 							if (screenState === 'off')
@@ -284,23 +308,66 @@ const ButtonControlBar = (props) =>
 					</Fab>
 				</Tooltip>
 			}
+			{
+				!smallScreen && <Tooltip title={modeTip} placement={smallScreen ? 'top' : 'right'}>
+					<Fab
+						aria-label={modeTip}
+						className={classes.fab}
+						size='small'
+						onClick={() =>
+						{
+							if (currentMode === 'filmstrip')
+							{
+								handleChangeMode('democratic');
+							}
+							else
+							{
+								handleChangeMode('filmstrip');
+							}
+						}}
+					>
+						{
+							currentMode === 'filmstrip' ? <AppsIcon /> : <VideoLabel />
+						}
+					</Fab>
+				</Tooltip>
+			}
+
+			{
+				!smallScreen && <Tooltip title={settingsTip} placement={smallScreen ? 'top' : 'right'}>
+					<Fab
+						aria-label={settingsTip}
+						className={classes.fab}
+						size='small'
+						onClick={() =>
+						{
+							setSettingsOpen(true);
+						}}
+					>
+						<SettingsIcon />
+					</Fab>
+				</Tooltip>
+			}
 		</div>
 	);
 };
 
 ButtonControlBar.propTypes =
 {
-	roomClient      : PropTypes.any.isRequired,
-	toolbarsVisible : PropTypes.bool.isRequired,
-	hiddenControls  : PropTypes.bool.isRequired,
-	drawerOverlayed : PropTypes.bool.isRequired,
-	toolAreaOpen    : PropTypes.bool.isRequired,
-	me              : appPropTypes.Me.isRequired,
-	micProducer     : appPropTypes.Producer,
-	webcamProducer  : appPropTypes.Producer,
-	screenProducer  : appPropTypes.Producer,
-	classes         : PropTypes.object.isRequired,
-	theme           : PropTypes.object.isRequired
+	roomClient       : PropTypes.any.isRequired,
+	toolbarsVisible  : PropTypes.bool.isRequired,
+	hiddenControls   : PropTypes.bool.isRequired,
+	drawerOverlayed  : PropTypes.bool.isRequired,
+	toolAreaOpen     : PropTypes.bool.isRequired,
+	me               : appPropTypes.Me.isRequired,
+	micProducer      : appPropTypes.Producer,
+	webcamProducer   : appPropTypes.Producer,
+	screenProducer   : appPropTypes.Producer,
+	classes          : PropTypes.object.isRequired,
+	theme            : PropTypes.object.isRequired,
+	setSettingsOpen  : PropTypes.func.isRequired,
+	currentMode      : PropTypes.bool.isRequired,
+	handleChangeMode : PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) =>
@@ -308,14 +375,28 @@ const mapStateToProps = (state) =>
 		toolbarsVisible : state.room.toolbarsVisible,
 		hiddenControls  : state.settings.hiddenControls,
 		drawerOverlayed : state.settings.drawerOverlayed,
+		currentMode     : state.room.mode,
 		toolAreaOpen    : state.toolarea.toolAreaOpen,
 		...meProducersSelector(state),
 		me              : state.me
 	});
 
+const mapDispatchToProps = (dispatch) =>
+	({
+
+		setSettingsOpen : (settingsOpen) =>
+		{
+			dispatch(roomActions.setSettingsOpen(settingsOpen));
+		},
+		handleChangeMode : (target) =>
+		{
+			dispatch(roomActions.setDisplayMode(target));
+		}
+	});
+
 export default withRoomContext(connect(
 	mapStateToProps,
-	null,
+	mapDispatchToProps,
 	null,
 	{
 		areStatesEqual : (next, prev) =>
@@ -324,6 +405,7 @@ export default withRoomContext(connect(
 				Math.round(prev.peerVolumes[prev.me.id]) ===
 				Math.round(next.peerVolumes[prev.me.id]) &&
 				prev.room.toolbarsVisible === next.room.toolbarsVisible &&
+				prev.room.mode === next.room.mode &&
 				prev.settings.hiddenControls === next.settings.hiddenControls &&
 				prev.settings.drawerOverlayed === next.settings.drawerOverlayed &&
 				prev.toolarea.toolAreaOpen === next.toolarea.toolAreaOpen &&
