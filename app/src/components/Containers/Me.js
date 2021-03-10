@@ -391,31 +391,7 @@ const Me = (props) =>
 				style={spacingStyle}
 			>
 
-				{ me.browser.platform !== 'mobile' && smallContainer &&
-				<div className={classnames(
-					classes.ptt,
-					(micState === 'muted' && me.isSpeaking) ? 'enabled' : null
-				)}
-				>
-					<FormattedMessage
-						id='me.mutedPTT'
-						defaultMessage='You are muted, hold down SPACE-BAR to talk'
-					/>
-				</div>
-				}
 				<div className={classes.viewContainer} style={style}>
-					{ me.browser.platform !== 'mobile' && !smallContainer &&
-						<div className={classnames(
-							classes.ptt,
-							(micState === 'muted' && me.isSpeaking) ? 'enabled' : null
-						)}
-						>
-							<FormattedMessage
-								id='me.mutedPTT'
-								defaultMessage='You are muted, hold down SPACE-BAR to talk'
-							/>
-						</div>
-					}
 					<p className={
 						classnames(
 							classes.meTag,

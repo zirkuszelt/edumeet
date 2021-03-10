@@ -364,57 +364,6 @@ const Peer = (props) =>
 							}
 						</Tooltip>
 
-						{ browser.platform !== 'mobile' &&
-							<Tooltip
-								title={intl.formatMessage({
-									id             : 'label.newWindow',
-									defaultMessage : 'New window'
-								})}
-								placement={smallScreen || smallContainer ? 'top' : 'left'}
-							>
-								{ smallContainer ?
-									<IconButton
-										aria-label={intl.formatMessage({
-											id             : 'label.newWindow',
-											defaultMessage : 'New window'
-										})}
-										className={classes.smallContainer}
-										disabled={
-											!videoVisible ||
-											(windowConsumer === webcamConsumer.id)
-										}
-										size='small'
-										color='primary'
-										onClick={() =>
-										{
-											toggleConsumerWindow(webcamConsumer);
-										}}
-									>
-										<NewWindowIcon />
-									</IconButton>
-									:
-									<Fab
-										aria-label={intl.formatMessage({
-											id             : 'label.newWindow',
-											defaultMessage : 'New window'
-										})}
-										className={classes.fab}
-										disabled={
-											!videoVisible ||
-											(windowConsumer === webcamConsumer.id)
-										}
-										size='large'
-										onClick={() =>
-										{
-											toggleConsumerWindow(webcamConsumer);
-										}}
-									>
-										<NewWindowIcon />
-									</Fab>
-								}
-							</Tooltip>
-						}
-
 						<Tooltip
 							title={intl.formatMessage({
 								id             : 'label.fullscreen',
@@ -641,56 +590,6 @@ const Peer = (props) =>
 									}, 2000);
 								}}
 							>
-								{ browser.platform !== 'mobile' &&
-									<Tooltip
-										title={intl.formatMessage({
-											id             : 'label.newWindow',
-											defaultMessage : 'New window'
-										})}
-										placement={smallScreen || smallContainer ? 'top' : 'left'}
-									>
-										{ smallContainer ?
-											<IconButton
-												aria-label={intl.formatMessage({
-													id             : 'label.newWindow',
-													defaultMessage : 'New window'
-												})}
-												className={classes.smallContainer}
-												disabled={
-													!videoVisible ||
-													(windowConsumer === consumer.id)
-												}
-												size='small'
-												color='primary'
-												onClick={() =>
-												{
-													toggleConsumerWindow(consumer);
-												}}
-											>
-												<NewWindowIcon />
-											</IconButton>
-											:
-											<Fab
-												aria-label={intl.formatMessage({
-													id             : 'label.newWindow',
-													defaultMessage : 'New window'
-												})}
-												className={classes.fab}
-												disabled={
-													!videoVisible ||
-													(windowConsumer === consumer.id)
-												}
-												size='large'
-												onClick={() =>
-												{
-													toggleConsumerWindow(consumer);
-												}}
-											>
-												<NewWindowIcon />
-											</Fab>
-										}
-									</Tooltip>
-								}
 
 								<Tooltip
 									title={intl.formatMessage({
@@ -827,34 +726,6 @@ const Peer = (props) =>
 								}, 2000);
 							}}
 						>
-							{ browser.platform !== 'mobile' &&
-								<Tooltip
-									title={intl.formatMessage({
-										id             : 'label.newWindow',
-										defaultMessage : 'New window'
-									})}
-									placement={smallScreen || smallContainer ? 'top' : 'left'}
-								>
-									<Fab
-										aria-label={intl.formatMessage({
-											id             : 'label.newWindow',
-											defaultMessage : 'New window'
-										})}
-										className={classes.fab}
-										disabled={
-											!screenVisible ||
-											(windowConsumer === screenConsumer.id)
-										}
-										size={smallContainer ? 'small' : 'large'}
-										onClick={() =>
-										{
-											toggleConsumerWindow(screenConsumer);
-										}}
-									>
-										<NewWindowIcon />
-									</Fab>
-								</Tooltip>
-							}
 
 							<Tooltip
 								title={intl.formatMessage({
