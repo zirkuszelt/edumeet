@@ -26,6 +26,9 @@ const App = (props) =>
 
 	const id = useParams().id.toLowerCase();
 
+	// eslint-disable-next-line
+	console.log('params', useParams())
+
 	useEffect(() =>
 	{
 		Room.preload();
@@ -42,11 +45,11 @@ const App = (props) =>
 			roomClient.setLocale(localeParam);
 		}
 
-		if (autoJoin)
+		if (autoJoin && id)
 		{
 			disableAutoJoin();
 			roomClient.join({
-				id : id
+				roomId : id
 			});
 
 		}
