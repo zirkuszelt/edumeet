@@ -17,7 +17,7 @@ const initialState =
 	screenSharingResolution : window.config.defaultScreenResolution || 'veryhigh',
 	screenSharingFrameRate  : window.config.defaultScreenSharingFrameRate || 5,
 	lastN                   : 4,
-	permanentTopBar         : true,
+	permanentTopBar         : false,
 	hiddenControls          : false,
 	showNotifications       : true,
 	notificationSounds      : true,
@@ -149,9 +149,9 @@ const settings = (state = initialState, action) =>
 
 		case 'TOGGLE_PERMANENT_TOPBAR':
 		{
-			const permanentTopBar = !state.permanentTopBar;
+			// const permanentTopBar = !state.permanentTopBar;
 
-			return { ...state, permanentTopBar };
+			return { ...state, permanentTopBar: false };
 		}
 
 		case 'TOGGLE_BUTTON_CONTROL_BAR':

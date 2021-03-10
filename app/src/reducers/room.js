@@ -16,7 +16,7 @@ const initialState =
 	showSettings                  : false,
 	fullScreenConsumer            : null, // ConsumerID
 	windowConsumer                : null, // ConsumerID
-	toolbarsVisible               : true,
+	toolbarsVisible               : false,
 	mode                          : window.config.defaultLayout || 'democratic',
 	selectedPeers                 : [],
 	spotlights                    : [],
@@ -203,9 +203,9 @@ const room = (state = initialState, action) =>
 
 		case 'SET_TOOLBARS_VISIBLE':
 		{
-			const { toolbarsVisible } = action.payload;
+			// const { toolbarsVisible } = action.payload;
 
-			return { ...state, toolbarsVisible };
+			return { ...state, toolbarsVisible: false };
 		}
 
 		case 'SET_DISPLAY_MODE':

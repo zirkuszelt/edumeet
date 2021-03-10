@@ -60,7 +60,7 @@ const styles = () =>
 		},
 		showingToolBar :
 		{
-			paddingTop : PADDING_V,
+			paddingTop : 0,
 			transition : 'padding .5s'
 		}
 	});

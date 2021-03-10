@@ -2740,8 +2740,6 @@ export default class RoomClient
 
 						store.dispatch(
 							lobbyPeerActions.addLobbyPeer(peerId));
-						store.dispatch(
-							roomActions.setToolbarsVisible(true));
 
 						this._soundNotification(notification.method);
 

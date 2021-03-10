@@ -23,7 +23,7 @@ import FullScreenView from './VideoContainers/FullScreenView';
 import VideoWindow from './VideoWindow/VideoWindow';
 import LockDialog from './AccessControl/LockDialog/LockDialog';
 import Settings from './Settings/Settings';
-import TopBar from './Controls/TopBar';
+// import TopBar from './Controls/TopBar';
 import WakeLock from 'react-wakelock-react16';
 import ExtraVideo from './Controls/ExtraVideo';
 import ButtonControlBar from './Controls/ButtonControlBar';
@@ -214,12 +214,12 @@ class Room extends React.PureComponent
 				}
 
 				<CssBaseline />
-
+				{/* 
 				<TopBar
 					fullscreenEnabled={this.fullscreen.fullscreenEnabled}
 					fullscreen={this.state.fullscreen}
 					onFullscreen={this.handleToggleFullscreen}
-				/>
+				/> */}
 
 				{ (browser.platform === 'mobile' || drawerOverlayed) ?
 					<nav>
@@ -325,7 +325,6 @@ const mapDispatchToProps = (dispatch) =>
 	({
 		setToolbarsVisible : (visible) =>
 		{
-			dispatch(roomActions.setToolbarsVisible(visible));
 		},
 		toggleToolArea : () =>
 		{

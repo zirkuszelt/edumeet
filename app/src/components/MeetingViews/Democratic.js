@@ -36,7 +36,7 @@ const styles = (theme) =>
 		},
 		showingToolBar :
 		{
-			paddingTop : PADDING_V,
+			// paddingTop : PADDING_V,
 			transition : 'padding .5s'
 		},
 		buttonControlBar :
