@@ -29,6 +29,7 @@ const initialState =
 	aboutOpen                     : false,
 	currentSettingsTab            : 'media', // media, appearance, advanced
 	lockDialogOpen                : false,
+	isJoinLoading                 : true,
 	joined                        : false,
 	muteAllInProgress             : false,
 	lobbyPeersPromotionInProgress : false,
@@ -180,6 +181,13 @@ const room = (state = initialState, action) =>
 			const joined = true;
 
 			return { ...state, joined };
+		}
+
+		case 'SET_JOIN_LOADING':
+		{
+			const { isJoinLoading } = action.payload;
+
+			return { ...state, isJoinLoading: isJoinLoading };
 		}
 
 		case 'TOGGLE_FULLSCREEN_CONSUMER':

@@ -2500,6 +2500,7 @@ export default class RoomClient
 
 		this._roomId = roomId;
 
+		store.dispatch(roomActions.setJoinLoading(true));
 		store.dispatch(roomActions.setRoomName(roomId));
 
 		this._signalingUrl = getSignalingUrl(this._peerId, roomId);
@@ -3642,6 +3643,7 @@ export default class RoomClient
 					rtpCapabilities : this._mediasoupDevice.rtpCapabilities
 				});
 
+			store.dispatch(roomActions.setJoinLoading(false));
 			logger.debug(
 				'_joinRoom() joined [authenticated:"%s", peers:"%o", roles:"%o", userRoles:"%o"]',
 				authenticated,
