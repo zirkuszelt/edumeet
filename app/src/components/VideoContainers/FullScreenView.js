@@ -52,11 +52,7 @@ const styles = (theme) =>
 			transitionDuration : '0.15s',
 			width              : '5vmin',
 			height             : '5vmin',
-			opacity            : 0,
-			'&.visible'        :
-			{
-				opacity : 1
-			}
+			opacity            : 1
 		},
 		collapseButton :
 		{
@@ -185,9 +181,7 @@ const FullScreenView = (props) =>
 		<div className={classes.root} ref={elementRef}>
 			<div className={classes.controls}>
 				<div
-					className={classnames(classes.button, {
-						visible : toolbarsVisible || permanentTopBar
-					})}
+					className={classnames(classes.button)}
 					onClick={(e) =>
 					{
 						e.stopPropagation();
