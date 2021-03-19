@@ -2,12 +2,11 @@ import domready from 'domready';
 import React, { Suspense } from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-import isElectron from 'is-electron';
 
 import { createIntl } from 'react-intl';
 import { IntlProvider } from 'react-intl-redux';
 
-import { Route, HashRouter, BrowserRouter, Switch } from 'react-router-dom';
+import { Route, BrowserRouter, Switch } from 'react-router-dom';
 import randomString from 'random-string';
 import Logger from './Logger';
 import debug from 'debug';
@@ -61,13 +60,6 @@ let roomClient;
 RoomClient.init({ store });
 
 const theme = createMuiTheme(window.config.theme);
-
-let Router;
-
-if (isElectron())
-	Router = HashRouter;
-else
-	Router = BrowserRouter;
 
 domready(() =>
 {
@@ -192,7 +184,7 @@ function run()
 					<PersistGate loading={<LoadingView />} persistor={persistor}>
 						<RoomContext.Provider value={roomClient}>
 							<SnackbarProvider>
-								<Router basename={basePath}>
+								<BrowserRouter basename={basePath}>
 									<Suspense fallback={<LoadingView />}>
 										<React.Fragment>
 											<Switch>
@@ -202,7 +194,7 @@ function run()
 											</Switch>
 										</React.Fragment>
 									</Suspense>
-								</Router>
+								</BrowserRouter>
 							</SnackbarProvider>
 						</RoomContext.Provider>
 					</PersistGate>
