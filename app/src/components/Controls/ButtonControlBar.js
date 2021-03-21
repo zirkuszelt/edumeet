@@ -19,33 +19,56 @@ import * as roomActions from '../../actions/roomActions';
 import SettingsIcon from '@material-ui/icons/Settings';
 import AppsIcon from '@material-ui/icons/Apps';
 import { VideoLabel } from '@material-ui/icons';
+import FullScreenIcon from '@material-ui/icons/Fullscreen';
+import CallEndIcon from '@material-ui/icons/CallEnd';
+
 const styles = (theme) =>
 	({
 		root :
 		{
-			position                     : 'fixed',
-			display                      : 'flex',
-			zIndex                       : 30,
-			[theme.breakpoints.up('md')] :
-			{
-				top            : '50%',
-				transform      : 'translate(0%, -50%)',
-				flexDirection  : 'column',
-				justifyContent : 'center',
-				alignItems     : 'center',
-				left           : theme.spacing(1)
-			},
-			[theme.breakpoints.down('sm')] :
-			{
-				flexDirection : 'row',
-				bottom        : theme.spacing(1),
-				left          : '50%',
-				transform     : 'translate(-50%, -0%)'
-			}
+			position      : 'fixed',
+			display       : 'flex',
+			zIndex        : 30,
+			flexDirection : 'row',
+			bottom        : theme.spacing(1),
+			left          : '50%',
+			transform     : 'translate(-50%, -0%)'
+
+			// [theme.breakpoints.up('md')] :
+			// {
+			// 	// top            : '50%',
+			// 	// transform      : 'translate(0%, -50%)',
+			// 	flexDirection  : 'row',
+			// 	justifyContent : 'center',
+			// 	alignItems     : 'center',
+			// 	left           : theme.spacing(1)
+			// },
+			// [theme.breakpoints.down('sm')] :
+			// {
+			// }
 		},
 		fab :
 		{
 			margin : theme.spacing(0.3)
+		},
+		settingsButton : {
+			margin          : theme.spacing(0.3),
+			backgroundColor : 'transparent',
+			'&:hover'       : {
+				color           : 'white',
+				backgroundColor : 'rgb(255, 255, 255, 0.2)'
+			}
+		},
+		hangupButton : {
+			margin          : theme.spacing(0.3),
+			color           : '#f50057',
+			backgroundColor : 'transparent',
+			'&:hover'       : {
+				backgroundColor : 'rgb(245, 0, 87, 0.2)'
+			}
+		},
+		spacer : {
+			width : '2em'
 		},
 		show :
 		{
@@ -220,6 +243,15 @@ const ButtonControlBar = (props) =>
 		defaultMessage : 'Filmstrip view'
 	});
 
+	const leaveTip = intl.formatMessage({
+		id             : 'label.leave',
+		defaultMessage : 'Leave'
+	});
+	const fullscreenTip = intl.formatMessage({
+		id             : 'label.fullscreen',
+		defaultMessage : 'Fullscreen'
+	});
+
 	return (
 		<div
 			className={
@@ -234,9 +266,9 @@ const ButtonControlBar = (props) =>
 				)
 			}
 		>
-			<Tooltip title={micTip} placement={smallScreen ? 'top' : 'right'}>
+			<Tooltip title={micTip} placement='top'>
 				<Fab
-					aria-label={intl.formatMessage({
+					aria-labfullscreenTipel={intl.formatMessage({
 						id             : 'device.muteAudio',
 						defaultMessage : 'Mute audio'
 					})}
@@ -261,7 +293,7 @@ const ButtonControlBar = (props) =>
 					}
 				</Fab>
 			</Tooltip>
-			<Tooltip title={webcamTip} placement={smallScreen ? 'top' : 'right'}>
+			<Tooltip title={webcamTip} placement='top'>
 				<Fab
 					aria-label={intl.formatMessage({
 						id             : 'device.startVideo',
@@ -286,7 +318,7 @@ const ButtonControlBar = (props) =>
 				</Fab>
 			</Tooltip>
 			{ me.browser.platform !== 'mobile' && !smallScreen &&
-				<Tooltip title={screenTip} placement={smallScreen ? 'top' : 'right'}>
+				<Tooltip title={screenTip} placement='top'>
 					<Fab
 						aria-label={intl.formatMessage({
 							id             : 'device.startScreenSharing',
@@ -308,8 +340,42 @@ const ButtonControlBar = (props) =>
 					</Fab>
 				</Tooltip>
 			}
+			{ !smallScreen && <div className={classes.spacer} /> }
+
 			{
-				!smallScreen && <Tooltip title={modeTip} placement={smallScreen ? 'top' : 'right'}>
+				!smallScreen && <Tooltip title={settingsTip} placement='top'>
+					<Fab
+						aria-label={settingsTip}
+						className={classes.settingsButton}
+						size='small'
+						onClick={() =>
+						{
+							setSettingsOpen(true);
+						}}
+					>
+						<SettingsIcon />
+					</Fab>
+				</Tooltip>
+			}
+			{
+				!smallScreen && <Tooltip title={leaveTip} placement='top'>
+					<Fab
+						aria-label={settingsTip}
+						className={classes.hangupButton}
+						color='red'
+						size='small'
+						onClick={() =>
+						{
+							window.parent.postMessage('stopWidget', '*');
+						}}
+					>
+						<CallEndIcon />
+					</Fab>
+				</Tooltip>
+			}
+			{ !smallScreen && <div className={classes.spacer} /> }
+			{
+				!smallScreen && <Tooltip title={modeTip} placement='top'>
 					<Fab
 						aria-label={modeTip}
 						className={classes.fab}
@@ -332,22 +398,22 @@ const ButtonControlBar = (props) =>
 					</Fab>
 				</Tooltip>
 			}
-
 			{
-				!smallScreen && <Tooltip title={settingsTip} placement={smallScreen ? 'top' : 'right'}>
+				!smallScreen && <Tooltip title={fullscreenTip} placement='top'>
 					<Fab
 						aria-label={settingsTip}
 						className={classes.fab}
 						size='small'
 						onClick={() =>
 						{
-							setSettingsOpen(true);
+							window.parent.postMessage('toggleFullscreen', '*');
 						}}
 					>
-						<SettingsIcon />
+						<FullScreenIcon />
 					</Fab>
 				</Tooltip>
 			}
+
 		</div>
 	);
 };
