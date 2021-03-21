@@ -5,8 +5,12 @@ import { withRoomContext } from '../../RoomContext';
 import * as settingsActions from '../../actions/settingsActions';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { useIntl } from 'react-intl';
+import { useIntl, FormattedMessage } from 'react-intl';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Select from '@material-ui/core/Select';
 import Switch from '@material-ui/core/Switch';
 
 const styles = (theme) =>
@@ -29,6 +33,7 @@ const styles = (theme) =>
 	});
 
 const AdvancedSettings = ({
+	roomClient,
 	settings,
 	onToggleAdvancedMode,
 	onToggleNotificationSounds,
@@ -57,6 +62,41 @@ const AdvancedSettings = ({
 					defaultMessage : 'Notification sounds'
 				})}
 			/>
+			{ !window.config.lockLastN &&
+				<form className={classes.setting} autoComplete='off'>
+					<FormControl className={classes.formControl}>
+						<Select
+							value={settings.lastN || ''}
+							onChange={(event) =>
+							{
+								if (event.target.value)
+									roomClient.changeMaxSpotlights(event.target.value);
+							}}
+							name='Last N'
+							autoWidth
+							className={classes.selectEmpty}
+						>
+							{ Array.from(
+								{ length: window.config.maxLastN || 10 },
+								(_, i) => i + 1
+							).map((lastN) =>
+							{
+								return (
+									<MenuItem key={lastN} value={lastN}>
+										{lastN}
+									</MenuItem>
+								);
+							})}
+						</Select>
+						<FormHelperText>
+							<FormattedMessage
+								id='settings.lastn'
+								defaultMessage='Number of visible videos'
+							/>
+						</FormHelperText>
+					</FormControl>
+				</form>
+			}
 		</React.Fragment>
 	);
 };
