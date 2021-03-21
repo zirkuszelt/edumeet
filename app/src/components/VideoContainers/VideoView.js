@@ -223,7 +223,7 @@ class VideoView extends React.PureComponent
 
 		if (showQuality)
 		{
-			quality = <SignalCellularOffIcon style={{ color: red[500] }}/>;
+			quality = <div />;
 
 			if (videoScore || audioScore)
 			{
