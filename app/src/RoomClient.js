@@ -411,197 +411,6 @@ export default class RoomClient
 
 	_startKeyListener()
 	{
-		// Add keydown event listener on document
-		document.addEventListener('keydown', (event) =>
-		{
-			if (event.repeat) return;
-			const key = String.fromCharCode(event.which);
-
-			const source = event.target;
-
-			const exclude = [ 'input', 'textarea' ];
-
-			if (exclude.indexOf(source.tagName.toLowerCase()) === -1)
-			{
-				logger.debug('keyDown() [key:"%s"]', key);
-
-				switch (key)
-				{
-
-					/*
-					case String.fromCharCode(37):
-					{
-						const newPeerId = this._spotlights.getPrevAsSelected(
-							store.getState().room.selectedPeerId);
-
-						if (newPeerId) this.setSelectedPeer(newPeerId);
-						break;
-					}
-
-					case String.fromCharCode(39):
-					{
-						const newPeerId = this._spotlights.getNextAsSelected(
-							store.getState().room.selectedPeerId);
-
-						if (newPeerId) this.setSelectedPeer(newPeerId);
-						break;
-					}
-					*/
-
-					case 'A': // Activate advanced mode
-					{
-						store.dispatch(settingsActions.toggleAdvancedMode());
-						store.dispatch(requestActions.notify(
-							{
-								text : intl.formatMessage({
-									id             : 'room.toggleAdvancedMode',
-									defaultMessage : 'Toggled advanced mode'
-								})
-							}));
-						break;
-					}
-
-					case '1': // Set democratic view
-					{
-						store.dispatch(roomActions.setDisplayMode('democratic'));
-						store.dispatch(requestActions.notify(
-							{
-								text : intl.formatMessage({
-									id             : 'room.setDemocraticView',
-									defaultMessage : 'Changed layout to democratic view'
-								})
-							}));
-						break;
-					}
-
-					case '2': // Set filmstrip view
-					{
-						store.dispatch(roomActions.setDisplayMode('filmstrip'));
-						store.dispatch(requestActions.notify(
-							{
-								text : intl.formatMessage({
-									id             : 'room.setFilmStripView',
-									defaultMessage : 'Changed layout to filmstrip view'
-								})
-							}));
-						break;
-					}
-
-					case ' ': // Push To Talk start
-					{
-						if (this._micProducer)
-						{
-							if (this._micProducer.paused)
-							{
-								this.unmuteMic();
-							}
-						}
-
-						break;
-					}
-					case 'M': // Toggle microphone
-					{
-						if (this._micProducer)
-						{
-							if (!this._micProducer.paused)
-							{
-								this.muteMic();
-
-								store.dispatch(requestActions.notify(
-									{
-										text : intl.formatMessage({
-											id             : 'devices.microphoneMute',
-											defaultMessage : 'Muted your microphone'
-										})
-									}));
-							}
-							else
-							{
-								this.unmuteMic();
-
-								store.dispatch(requestActions.notify(
-									{
-										text : intl.formatMessage({
-											id             : 'devices.microphoneUnMute',
-											defaultMessage : 'Unmuted your microphone'
-										})
-									}));
-							}
-						}
-						else
-						{
-							this.updateMic({ start: true });
-
-							store.dispatch(requestActions.notify(
-								{
-									text : intl.formatMessage({
-										id             : 'devices.microphoneEnable',
-										defaultMessage : 'Enabled your microphone'
-									})
-								}));
-						}
-
-						break;
-					}
-
-					case 'V': // Toggle video
-					{
-						if (this._webcamProducer)
-							this.disableWebcam();
-						else
-							this.updateWebcam({ start: true });
-
-						break;
-					}
-
-					case 'H': // Open help dialog
-					{
-						store.dispatch(roomActions.setHelpOpen(true));
-
-						break;
-					}
-
-					default:
-					{
-						break;
-					}
-				}
-			}
-		});
-		document.addEventListener('keyup', (event) =>
-		{
-			const key = String.fromCharCode(event.which);
-
-			const source = event.target;
-
-			const exclude = [ 'input', 'textarea' ];
-
-			if (exclude.indexOf(source.tagName.toLowerCase()) === -1)
-			{
-				logger.debug('keyUp() [key:"%s"]', key);
-
-				switch (key)
-				{
-					case ' ': // Push To Talk stop
-					{
-						if (this._micProducer)
-						{
-							if (!this._micProducer.paused)
-							{
-								this.muteMic();
-							}
-						}
-
-						break;
-					}
-					default:
-					{
-						break;
-					}
-				}
-			}
-			event.preventDefault();
-		}, true);
 	}
 
 	_startDevicesListener()
@@ -719,33 +528,7 @@ export default class RoomClient
 
 	_soundNotification(type = 'default')
 	{
-		const { notificationSounds } = store.getState().settings;
-
-		if (notificationSounds)
-		{
-			const soundAlert = this._soundAlerts[type] === undefined
-				? this._soundAlerts['default'] : this._soundAlerts[type];
-
-			const now = Date.now();
-
-			if (soundAlert.last !== undefined && (now - soundAlert.last) < soundAlert.delay)
-			{
-				return;
-			}
-			soundAlert.last = now;
-
-			const alertPromise = soundAlert.audio.play();
-
-			if (alertPromise !== undefined)
-			{
-				alertPromise
-					.then()
-					.catch((error) =>
-					{
-						logger.error('_soundAlert.play() [error:"%o"]', error);
-					});
-			}
-		}
+		// disabled
 	}
 
 	timeoutCallback(callback)
@@ -2933,16 +2716,16 @@ export default class RoomClient
 						store.dispatch(
 							peerActions.setPeerDisplayName(displayName, peerId));
 
-						store.dispatch(requestActions.notify(
-							{
-								text : intl.formatMessage({
-									id             : 'room.peerChangedDisplayName',
-									defaultMessage : '{oldDisplayName} is now {displayName}'
-								}, {
-									oldDisplayName,
-									displayName
-								})
-							}));
+						// store.dispatch(requestActions.notify(
+						// 	{
+						// 		text : intl.formatMessage({
+						// 			id             : 'room.peerChangedDisplayName',
+						// 			defaultMessage : '{oldDisplayName} is now {displayName}'
+						// 		}, {
+						// 			oldDisplayName,
+						// 			displayName
+						// 		})
+						// 	}));
 
 						break;
 					}
@@ -3108,15 +2891,15 @@ export default class RoomClient
 
 						this._soundNotification(notification.method);
 
-						store.dispatch(requestActions.notify(
-							{
-								text : intl.formatMessage({
-									id             : 'room.newPeer',
-									defaultMessage : '{displayName} joined the room'
-								}, {
-									displayName
-								})
-							}));
+						// store.dispatch(requestActions.notify(
+						// 	{
+						// 		text : intl.formatMessage({
+						// 			id             : 'room.newPeer',
+						// 			defaultMessage : '{displayName} joined the room'
+						// 		}, {
+						// 			displayName
+						// 		})
+						// 	}));
 
 						break;
 					}
@@ -3675,15 +3458,15 @@ export default class RoomClient
 				{
 					store.dispatch(meActions.addRole(roleId));
 
-					store.dispatch(requestActions.notify(
-						{
-							text : intl.formatMessage({
-								id             : 'roles.gotRole',
-								defaultMessage : 'You got the role: {role}'
-							}, {
-								role : roomUserRoles.get(roleId).label
-							})
-						}));
+					// store.dispatch(requestActions.notify(
+					// 	{
+					// 		text : intl.formatMessage({
+					// 			id             : 'roles.gotRole',
+					// 			defaultMessage : 'You got the role: {role}'
+					// 		}, {
+					// 			role : roomUserRoles.get(roleId).label
+					// 		})
+					// 	}));
 				}
 			}
 
@@ -3765,13 +3548,13 @@ export default class RoomClient
 			// Clean all the existing notifications.
 			store.dispatch(notificationActions.removeAllNotifications());
 
-			store.dispatch(requestActions.notify(
-				{
-					text : intl.formatMessage({
-						id             : 'room.joined',
-						defaultMessage : 'You have joined the room'
-					})
-				}));
+			// store.dispatch(requestActions.notify(
+			// 	{
+			// 		text : intl.formatMessage({
+			// 			id             : 'room.joined',
+			// 			defaultMessage : 'You have joined the room'
+			// 		})
+			// 	}));
 
 			this._spotlights.addPeers(peers);
 
