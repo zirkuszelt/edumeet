@@ -27,7 +27,8 @@ const styles = () =>
 			display             : 'grid',
 			overflow            : 'hidden',
 			gridTemplateColumns : '1fr',
-			gridTemplateRows    : '1fr 0.25fr'
+			gridTemplateRows    : '1fr 0.25fr',
+			paddingBottom       : 50
 		},
 		speaker :
 		{

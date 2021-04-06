@@ -27,7 +27,8 @@ const styles = (theme) =>
 			overflow       : 'hidden',
 			justifyContent : 'center',
 			alignItems     : 'center',
-			alignContent   : 'center'
+			alignContent   : 'center',
+			paddingBottom  : 50
 		},
 		hiddenToolBar :
 		{
