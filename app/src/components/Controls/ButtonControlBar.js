@@ -1,7 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { meProducersSelector } from '../Selectors';
+import {
+	meProducersSelector,
+	peersLengthSelector
+} from '../Selectors';
 import { withStyles } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import classnames from 'classnames';
@@ -21,6 +24,10 @@ import AppsIcon from '@material-ui/icons/Apps';
 import { VideoLabel } from '@material-ui/icons';
 import FullScreenIcon from '@material-ui/icons/Fullscreen';
 import CallEndIcon from '@material-ui/icons/CallEnd';
+import * as toolareaActions from '../../actions/toolareaActions';
+import IconButton from '@material-ui/core/IconButton';
+import Badge from '@material-ui/core/Badge';
+import PeopleIcon from '@material-ui/icons/People';
 
 const styles = (theme) =>
 	({
@@ -50,6 +57,14 @@ const styles = (theme) =>
 		fab :
 		{
 			margin : theme.spacing(0.3)
+		},
+		participantsButton :
+		{
+			color    : 'white',
+			position : 'fixed',
+			bottom   : 0,
+			left     : 0,
+			opacity  : 0.8
 		},
 		settingsButton : {
 			margin          : theme.spacing(0.3),
@@ -124,6 +139,8 @@ const ButtonControlBar = (props) =>
 		classes,
 		theme,
 		setSettingsOpen,
+		peersLength,
+		openUsersTab,
 		currentMode,
 		handleChangeMode
 	} = props;
@@ -252,7 +269,7 @@ const ButtonControlBar = (props) =>
 		defaultMessage : 'Fullscreen'
 	});
 
-	return (
+	const toolBar = (
 		<div
 			className={
 				classnames(
@@ -268,7 +285,7 @@ const ButtonControlBar = (props) =>
 		>
 			<Tooltip title={micTip} placement='top'>
 				<Fab
-					aria-labfullscreenTipel={intl.formatMessage({
+					aria-label={intl.formatMessage({
 						id             : 'device.muteAudio',
 						defaultMessage : 'Mute audio'
 					})}
@@ -416,6 +433,36 @@ const ButtonControlBar = (props) =>
 
 		</div>
 	);
+
+	return (
+		<div>
+			<Tooltip
+				title={intl.formatMessage({
+					id             : 'tooltip.participants',
+					defaultMessage : 'Show participants'
+				})}
+			>
+				<IconButton
+					aria-label={intl.formatMessage({
+						id             : 'tooltip.participants',
+						defaultMessage : 'Show participants'
+					})}
+					className={classes.participantsButton}
+					onClick={() => openUsersTab()}
+					disableRipple
+				>
+					<Badge
+						color='primary'
+						max={Infinity}
+						badgeContent={peersLength + 1}
+					>
+						<PeopleIcon />
+					</Badge>
+				</IconButton>
+			</Tooltip>
+			{toolBar}
+		</div>
+	);
 };
 
 ButtonControlBar.propTypes =
@@ -432,6 +479,8 @@ ButtonControlBar.propTypes =
 	classes          : PropTypes.object.isRequired,
 	theme            : PropTypes.object.isRequired,
 	setSettingsOpen  : PropTypes.func.isRequired,
+	openUsersTab     : PropTypes.func.isRequired,
+	peersLength      : PropTypes.number,
 	currentMode      : PropTypes.bool.isRequired,
 	handleChangeMode : PropTypes.func.isRequired
 };
@@ -443,6 +492,7 @@ const mapStateToProps = (state) =>
 		drawerOverlayed : state.settings.drawerOverlayed,
 		currentMode     : state.room.mode,
 		toolAreaOpen    : state.toolarea.toolAreaOpen,
+		peersLength     : peersLengthSelector(state),
 		...meProducersSelector(state),
 		me              : state.me
 	});
@@ -457,6 +507,11 @@ const mapDispatchToProps = (dispatch) =>
 		handleChangeMode : (target) =>
 		{
 			dispatch(roomActions.setDisplayMode(target));
+		},
+		openUsersTab : () =>
+		{
+			dispatch(toolareaActions.openToolArea());
+			dispatch(toolareaActions.setToolTab('users'));
 		}
 	});
 
