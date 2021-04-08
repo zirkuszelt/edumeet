@@ -434,32 +434,36 @@ const ButtonControlBar = (props) =>
 		</div>
 	);
 
-	return (
-		<div>
-			<Tooltip
-				title={intl.formatMessage({
+	const sidebarToggle = (
+		<Tooltip
+			title={intl.formatMessage({
+				id             : 'tooltip.participants',
+				defaultMessage : 'Show participants'
+			})}
+		>
+			<IconButton
+				aria-label={intl.formatMessage({
 					id             : 'tooltip.participants',
 					defaultMessage : 'Show participants'
 				})}
+				className={classes.participantsButton}
+				onClick={() => openUsersTab()}
+				disableRipple
 			>
-				<IconButton
-					aria-label={intl.formatMessage({
-						id             : 'tooltip.participants',
-						defaultMessage : 'Show participants'
-					})}
-					className={classes.participantsButton}
-					onClick={() => openUsersTab()}
-					disableRipple
+				<Badge
+					color='primary'
+					max={Infinity}
+					badgeContent={peersLength + 1}
 				>
-					<Badge
-						color='primary'
-						max={Infinity}
-						badgeContent={peersLength + 1}
-					>
-						<PeopleIcon />
-					</Badge>
-				</IconButton>
-			</Tooltip>
+					<PeopleIcon />
+				</Badge>
+			</IconButton>
+		</Tooltip>
+	);
+
+	return (
+		<div>
+			{!smallScreen && sidebarToggle}
 			{toolBar}
 		</div>
 	);
