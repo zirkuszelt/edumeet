@@ -193,35 +193,6 @@ const ListPeer = (props) =>
 						/>
 					</Tooltip>
 			}
-			<Tooltip
-				title={intl.formatMessage({
-					id             : 'tooltip.muteParticipant',
-					defaultMessage : 'Mute audio'
-				})}
-				placement='bottom'
-			>
-				<IconButton
-					aria-label={intl.formatMessage({
-						id             : 'tooltip.muteParticipant',
-						defaultMessage : 'Mute audio'
-					})}
-					color={micEnabled ? 'primary' : 'secondary'}
-					disabled={peer.peerAudioInProgress}
-					className={classes.buttons}
-					onClick={() =>
-					{
-						micEnabled ?
-							roomClient.modifyPeerConsumer(peer.id, 'mic', true) :
-							roomClient.modifyPeerConsumer(peer.id, 'mic', false);
-					}}
-				>
-					{ micEnabled ?
-						<VolumeUpIcon />
-						:
-						<VolumeOffIcon />
-					}
-				</IconButton>
-			</Tooltip>
 			{children}
 			<Tooltip
 				title={intl.formatMessage({
